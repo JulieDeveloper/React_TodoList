@@ -10,11 +10,9 @@ const TodoCollection = ({
   return (
     <div>
       TodoCollection
-      <TodoItem />
-      <TodoItem />
-      <TodoItem />
-      <TodoItem />
-      <TodoItem />
+      {todos.map((todo) => {
+        return <TodoItem key={todo.id} todo={todo} />;
+      })}
     </div>
   );
 };
