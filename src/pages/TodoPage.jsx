@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { Footer, Header, TodoCollection, TodoInput } from 'components';
 
 const dummyTodos = [
@@ -26,6 +27,23 @@ const dummyTodos = [
 
 const TodoPage = () => {
   const [inputValue, setInputValue] = useState('');
+  const [todos, setTodos] = useState(dummyTodos);
+  const handleAddTodo = () => {
+    if (!inputValue) return;
+
+    setTodos((prevTodos) => {
+      return [
+        ...prevTodos,
+        {
+          title: inputValue,
+          inDone: false,
+          id: uuidv4(),
+        },
+      ];
+    });
+
+    setInputValue('');
+  };
   const handleChange = (value) => {
     setInputValue(value);
   };
@@ -33,8 +51,13 @@ const TodoPage = () => {
     <div>
       TodoPage
       <Header />
-      <TodoInput inputValue={inputValue} onChange={handleChange} />
-      <TodoCollection todos={dummyTodos} />
+      <TodoInput
+        inputValue={inputValue}
+        onChange={handleChange}
+        onAddTodo={handleAddTodo}
+        onKeyDown={handleAddTodo}
+      />
+      <TodoCollection todos={todos} />
       <Footer />
     </div>
   );
