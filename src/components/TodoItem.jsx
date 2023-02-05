@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import clsx from 'clsx';
 import styled from 'styled-components';
 import {
@@ -102,6 +103,15 @@ const StyledTaskItem = styled.div`
 `;
 
 const TodoItem = ({ todo, onSave, onDelete, onToggleDone, onChangeMode }) => {
+  const inputRef = useRef(null);
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && inputRef.current.value.length) {
+      onSave?.({ id: todo.id, title: inputRef.current.value });
+      onChangeMode?.({ id: todo.id, isEdit: false });
+    } else if (e.key === 'Escape') {
+      onChangeMode?.({ id: todo.id, isEdit: false });
+    }
+  };
   return (
     <StyledTaskItem
       className={clsx('', { done: todo.isDone, edit: todo.isEdit })}
@@ -119,7 +129,12 @@ const TodoItem = ({ todo, onSave, onDelete, onToggleDone, onChangeMode }) => {
         }}
       >
         <span className="task-item-body-text">{todo.title}</span>
-        <input className="task-item-body-input" value={todo.title} />
+        <input
+          className="task-item-body-input"
+          ref={inputRef}
+          defaultValue={todo.title}
+          onKeyDown={handleKeyDown}
+        />
       </div>
       <div className="task-item-action ">
         <button className="btn-reset btn-destroy icon"></button>
