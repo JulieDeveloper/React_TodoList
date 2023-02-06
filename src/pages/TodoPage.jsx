@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 // import { v4 as uuidv4 } from 'uuid';
-import { getTodos, createTodo, patchTodo } from '../api/todos';
+import { getTodos, createTodo, patchTodo, deleteTodo } from '../api/todos';
 import { Footer, Header, TodoCollection, TodoInput } from 'components';
 
 const TodoPage = () => {
@@ -97,8 +97,13 @@ const TodoPage = () => {
     }
   };
 
-  const handleDelete = (id) => {
-    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
+  const handleDelete = async (id) => {
+    try {
+      await deleteTodo(id);
+      setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
