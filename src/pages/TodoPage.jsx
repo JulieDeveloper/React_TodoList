@@ -75,18 +75,26 @@ const TodoPage = () => {
     });
   };
 
-  const handleSave = ({ id, title }) => {
-    setTodos((prevTodos) => {
-      return prevTodos.map((todo) => {
-        if (todo.id === id) {
-          return {
-            ...todo,
-            title: title,
-          };
-        }
-        return { ...todo };
+  const handleSave = async ({ id, title }) => {
+    try {
+      await patchTodo({
+        id,
+        title,
       });
-    });
+      setTodos((prevTodos) => {
+        return prevTodos.map((todo) => {
+          if (todo.id === id) {
+            return {
+              ...todo,
+              title: title,
+            };
+          }
+          return { ...todo };
+        });
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleDelete = (id) => {
