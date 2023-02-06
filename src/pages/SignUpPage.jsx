@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   AuthContainer,
   AuthInputContainer,
@@ -8,6 +9,10 @@ import { ACLogoIcon } from 'assets/images';
 import { AuthInput } from 'components';
 
 const SignUpPage = () => {
+  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
   return (
     <AuthContainer>
       <div>
@@ -16,15 +21,37 @@ const SignUpPage = () => {
       <h1>建立您的帳號</h1>
 
       <AuthInputContainer>
-        <AuthInput />
+        <AuthInput
+          label="帳號"
+          placeholder="請輸入帳號 "
+          value={username}
+          onChange={(usernameInputValue) => {
+            setUsername(usernameInputValue);
+          }}
+        />
       </AuthInputContainer>
 
       <AuthInputContainer>
-        <AuthInput />
+        <AuthInput
+          label="email"
+          placeholder="請輸入email"
+          value={email}
+          onChange={(emailInputValue) => {
+            setEmail(emailInputValue);
+          }}
+        />
       </AuthInputContainer>
 
       <AuthInputContainer>
-        <AuthInput />
+        <AuthInput
+          label="密碼"
+          type="password"
+          placeholder="請輸入密碼"
+          value={password}
+          onChange={(passwordInputValue) => {
+            setPassword(passwordInputValue);
+          }}
+        />
       </AuthInputContainer>
       <AuthButton>註冊</AuthButton>
       <AuthLinkText>取消</AuthLinkText>
