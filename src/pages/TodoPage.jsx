@@ -1,27 +1,35 @@
 import { useState, useEffect } from 'react';
-import { v4 as uuidv4 } from 'uuid';
-import { getTodos } from '../api/todos';
+// import { v4 as uuidv4 } from 'uuid';
+import { getTodos, createTodo } from '../api/todos';
 import { Footer, Header, TodoCollection, TodoInput } from 'components';
 
 const TodoPage = () => {
   const [inputValue, setInputValue] = useState('');
   const [todos, setTodos] = useState([]);
   const todoNums = todos.length;
-  const handleAddTodo = () => {
+  const handleAddTodo = async () => {
     if (!inputValue) return;
 
-    setTodos((prevTodos) => {
-      return [
-        ...prevTodos,
-        {
-          title: inputValue,
-          inDone: false,
-          id: uuidv4(),
-        },
-      ];
-    });
-
-    setInputValue('');
+    try {
+      const data = await createTodo({
+        title: inputValue,
+        isDone: false,
+      });
+      setTodos((prevTodos) => {
+        return [
+          ...prevTodos,
+          {
+            id: data.id,
+            title: data.title,
+            isDone: data.isDone,
+            isEdit: false,
+          },
+        ];
+      });
+      setInputValue('');
+    } catch (error) {
+      console.error(error);
+    }
   };
   const handleChange = (value) => {
     setInputValue(value);
