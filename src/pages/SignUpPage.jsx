@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import {
   AuthContainer,
@@ -54,7 +55,9 @@ const SignUpPage = () => {
         />
       </AuthInputContainer>
       <AuthButton>註冊</AuthButton>
-      <AuthLinkText>取消</AuthLinkText>
+      <Link to="/login">
+        <AuthLinkText>取消</AuthLinkText>
+      </Link>
     </AuthContainer>
   );
 };

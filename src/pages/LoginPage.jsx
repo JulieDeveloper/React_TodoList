@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import {
   AuthContainer,
@@ -42,7 +43,9 @@ const LoginPage = () => {
         />
       </AuthInputContainer>
       <AuthButton>登入</AuthButton>
-      <AuthLinkText>註冊</AuthLinkText>
+      <Link to="/signup">
+        <AuthLinkText>註冊</AuthLinkText>
+      </Link>
     </AuthContainer>
   );
 };
