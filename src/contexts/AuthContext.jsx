@@ -8,6 +8,7 @@ const defaultAuthContext = {
   login: null,
   logout: null,
 };
+const AuthContext = createContext(defaultAuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -17,10 +18,49 @@ export const AuthProvider = ({ children }) => {
     <AuthProvider
       value={{
         isAuthenticated,
-        currentMember: payload,
+        currentMember: payload && {
+          id: payload.sub,
+          name: payload.name,
+        },
+        register: async (data) => {
+          const { success, authToken } = await register({
+            email: data.email,
+            username: data.username,
+            password: data.password,
+          });
+          const temPayload = jwt.decode(authToken);
+          if (temPayload) {
+            setPayload(temPayload);
+            setIsAuthenticated(true);
+            localStorage.setItem('authToken', authToken);
+          } else {
+            setIsAuthenticated(false);
+            setPayload(null);
+          }
+        },
+        login: async (data) => {
+          const { success, authToken } = await login({
+            username: data.username,
+            password: data.password,
+          });
+          const temPayload = jwt.decode(authToken);
+          if (temPayload) {
+            setPayload(temPayload);
+            setIsAuthenticated(true);
+            localStorage.setItem('authToken', authToken);
+          } else {
+            setIsAuthenticated(false);
+            setPayload(null);
+          }
+        },
+        logout: () => {
+          localStorage.removeItem('authToken');
+          setIsAuthenticated(false);
+          setPayload(null);
+        },
       }}
-    ></AuthProvider>
+    >
+      {children}
+    </AuthProvider>
   );
 };
-
-const AuthContext = createContext(defaultAuthContext);
