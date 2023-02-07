@@ -64,6 +64,7 @@ export const AuthProvider = ({ children }) => {
             setIsAuthenticated(false);
             setPayload(null);
           }
+          return success;
         },
         login: async (data) => {
           const { success, authToken } = await login({
@@ -79,6 +80,7 @@ export const AuthProvider = ({ children }) => {
             setIsAuthenticated(false);
             setPayload(null);
           }
+          return success;
         },
         logout: () => {
           localStorage.removeItem('authToken');
