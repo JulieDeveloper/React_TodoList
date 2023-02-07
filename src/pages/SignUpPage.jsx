@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import {
@@ -8,12 +9,49 @@ import {
 } from 'components/common/auth.styled';
 import { ACLogoIcon } from 'assets/images';
 import { AuthInput } from 'components';
+import { register } from '../api/auth';
 
 const SignUpPage = () => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  const handleChange = async () => {
+    try {
+      if (email.length <= 0) return;
+      if (username.length <= 0) return;
+      if (password.length <= 0) return;
+
+      const { success, authToken } = await register({
+        email,
+        username,
+        password,
+      });
+
+      if (success) {
+        localStorage.setItem('authToken', authToken);
+        // success register message
+        Swal.fire({
+          position: 'top',
+          title: '註冊成功！',
+          timer: 1000,
+          icon: 'success',
+          showConfirmButton: false,
+        });
+        return;
+      }
+      // fail register message
+      Swal.fire({
+        position: 'top',
+        title: '登入失敗！',
+        timer: 1000,
+        icon: 'error',
+        showConfirmButton: false,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <AuthContainer>
       <div>
@@ -54,7 +92,7 @@ const SignUpPage = () => {
           }}
         />
       </AuthInputContainer>
-      <AuthButton>註冊</AuthButton>
+      <AuthButton onChange={handleChange}>註冊</AuthButton>
       <Link to="/login">
         <AuthLinkText>取消</AuthLinkText>
       </Link>
