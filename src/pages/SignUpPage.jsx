@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2';
-import { Link } from 'react-router-dom';
+import { Link, navigate, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import {
   AuthContainer,
@@ -15,6 +15,7 @@ const SignUpPage = () => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = async () => {
     try {
@@ -38,6 +39,7 @@ const SignUpPage = () => {
           icon: 'success',
           showConfirmButton: false,
         });
+        navigate('/todos');
         return;
       }
       // fail register message

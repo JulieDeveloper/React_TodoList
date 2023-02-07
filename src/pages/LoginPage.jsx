@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { login } from '../api/auth';
 import {
@@ -14,6 +14,7 @@ import { AuthInput } from 'components';
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleClick = async () => {
     if (username.length <= 0) return;
@@ -35,6 +36,7 @@ const LoginPage = () => {
         icon: 'success',
         showConfirmButton: false,
       });
+      navigate('/todos');
       return;
     }
     //failed login message
