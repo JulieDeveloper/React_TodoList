@@ -9,7 +9,7 @@ import {
 } from 'components/common/auth.styled';
 import { ACLogoIcon } from 'assets/images';
 import { AuthInput } from 'components';
-import { register, checkPermission } from '../api/auth';
+import { useAuth } from 'contexts/AuthContext';
 
 const SignUpPage = () => {
   const [email, setEmail] = useState('');
@@ -17,57 +17,45 @@ const SignUpPage = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
+  const { register, isAuthenticated } = useAuth();
+
   const handleClick = async () => {
-    try {
-      if (email.length === 0) return;
-      if (username.length === 0) return;
-      if (password.length === 0) return;
+    if (email.length === 0) return;
+    if (username.length === 0) return;
+    if (password.length === 0) return;
 
-      const { success, authToken } = await register({
-        email,
-        username,
-        password,
-      });
+    const success = await register({
+      email,
+      username,
+      password,
+    });
 
-      if (success) {
-        localStorage.setItem('authToken', authToken);
-        // success register message
-        Swal.fire({
-          position: 'top',
-          title: '註冊成功！',
-          timer: 1000,
-          icon: 'success',
-          showConfirmButton: false,
-        });
-        navigate('/todos');
-        return;
-      }
-      // fail register message
+    if (success) {
+      // success register message
       Swal.fire({
         position: 'top',
-        title: '登入失敗！',
+        title: '註冊成功！',
         timer: 1000,
-        icon: 'error',
+        icon: 'success',
         showConfirmButton: false,
       });
-    } catch (error) {
-      console.error(error);
+      return;
     }
+    // fail register message
+    Swal.fire({
+      position: 'top',
+      title: '登入失敗！',
+      timer: 1000,
+      icon: 'error',
+      showConfirmButton: false,
+    });
   };
 
   useEffect(() => {
-    const checkTokenIsValid = async () => {
-      const authToken = localStorage.getItem('authToken');
-      if (!authToken) return;
-
-      const result = await checkPermission(authToken);
-      if (result) {
-        navigate('/todos');
-      }
-    };
-
-    checkTokenIsValid();
-  }, [navigate]);
+    if (isAuthenticated) {
+      navigate('/todos');
+    }
+  }, [navigate, isAuthenticated]);
 
   return (
     <AuthContainer>

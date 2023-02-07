@@ -1,7 +1,7 @@
 import Swal from 'sweetalert2';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { login, checkPermission } from '../api/auth';
+import { useAuth } from 'contexts/AuthContext';
 import {
   AuthContainer,
   AuthInputContainer,
@@ -16,18 +16,18 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
+  const { login, isAuthenticated } = useAuth();
+
   const handleClick = async () => {
     if (username.length <= 0) return;
     if (password.length <= 0) return;
 
-    const { success, authToken } = await login({
+    const success = await login({
       username,
       password,
     });
 
     if (success) {
-      localStorage.setItem('authToken', authToken);
-
       //success login message
       Swal.fire({
         position: 'top',
@@ -36,7 +36,6 @@ const LoginPage = () => {
         icon: 'success',
         showConfirmButton: false,
       });
-      navigate('/todos');
       return;
     }
     //failed login message
@@ -48,18 +47,12 @@ const LoginPage = () => {
       showConfirmButton: false,
     });
   };
-  useEffect(() => {
-    const checkTokenIsValid = async () => {
-      const authToken = localStorage.getItem('authToken');
-      if (!authToken) return;
-      const result = await checkPermission(authToken);
-      if (result) {
-        navigate('/todos');
-      }
-    };
 
-    checkTokenIsValid();
-  }, [navigate]);
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/todos');
+    }
+  }, [navigate, isAuthenticated]);
 
   return (
     <AuthContainer>
