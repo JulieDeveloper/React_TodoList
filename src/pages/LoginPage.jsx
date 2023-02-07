@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { login } from '../api/auth';
@@ -25,7 +26,25 @@ const LoginPage = () => {
 
     if (success) {
       localStorage.setItem('authToken', authToken);
+
+      //success login message
+      Swal.fire({
+        position: 'top',
+        title: '登入成功!',
+        timer: 1000,
+        icon: 'success',
+        showConfirmButton: false,
+      });
+      return;
     }
+    //failed login message
+    Swal.fire({
+      position: 'top',
+      title: '登入失敗!',
+      timer: 1000,
+      icon: 'error',
+      showConfirmButton: false,
+    });
   };
 
   return (
