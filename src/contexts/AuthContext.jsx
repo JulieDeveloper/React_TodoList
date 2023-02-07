@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
   const [payload, setPayload] = useState(null);
 
   return (
-    <AuthProvider
+    <AuthContext.AuthProvider
       value={{
         isAuthenticated,
         currentMember: payload && {
@@ -61,6 +61,6 @@ export const AuthProvider = ({ children }) => {
       }}
     >
       {children}
-    </AuthProvider>
+    </AuthContext.AuthProvider>
   );
 };
