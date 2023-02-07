@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2';
-import { Link, navigate, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import {
   AuthContainer,
