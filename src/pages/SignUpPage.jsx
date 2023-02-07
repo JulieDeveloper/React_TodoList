@@ -17,11 +17,11 @@ const SignUpPage = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleChange = async () => {
+  const handleClick = async () => {
     try {
-      if (email.length <= 0) return;
-      if (username.length <= 0) return;
-      if (password.length <= 0) return;
+      if (email.length === 0) return;
+      if (username.length === 0) return;
+      if (password.length === 0) return;
 
       const { success, authToken } = await register({
         email,
@@ -109,7 +109,7 @@ const SignUpPage = () => {
           }}
         />
       </AuthInputContainer>
-      <AuthButton onChange={handleChange}>註冊</AuthButton>
+      <AuthButton onClick={handleClick}>註冊</AuthButton>
       <Link to="/login">
         <AuthLinkText>取消</AuthLinkText>
       </Link>
